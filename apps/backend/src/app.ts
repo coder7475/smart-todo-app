@@ -3,8 +3,9 @@ import helmet from "helmet";
 import cors from "cors";
 
 import indexRouter from "@/routes";
-import userRoute from "@/routes/users.routes";
+import userRoute from "@/routes/tasks.routes";
 import { middlewares } from "@/middlewares";
+import tasksRouter from "@/routes/tasks.routes";
 
 const app: Express = express();
 // connect to database
@@ -34,7 +35,7 @@ app.use(helmet());
 
 // Routes
 app.use("/", indexRouter);
-app.use("/users", userRoute);
+app.use("/api/v1", tasksRouter);
 
 // Not found route handler
 app.use(middlewares.notFoundRoute);

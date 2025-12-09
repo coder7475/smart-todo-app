@@ -1,35 +1,23 @@
-# Base stage with pnpm setup
-FROM node:23.11.1-slim AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+# Lightweight Node image for development
+FROM node:24-alpine
+
+# Enable corepack so pnpm is available
 RUN corepack enable
+
+# Create app directory
 WORKDIR /app
 
-# Production dependencies stage
-FROM base AS prod-deps
+# Copy only dependency files first (for better layer caching)
 COPY package.json pnpm-lock.yaml ./
-# Install only production dependencies
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prod --frozen-lockfile --ignore-scripts
 
-# Build stage - install all dependencies and build
-FROM base AS build
-COPY package.json pnpm-lock.yaml ./
-# Install all dependencies (including dev dependencies)
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --ignore-scripts
+# Install dependencies with pnpm (no frozen lock for dev, but you can add --frozen-lockfile)
+RUN pnpm install
+
+# Copy the rest of the source code
 COPY . .
-RUN pnpm run build
 
-# Final stage - combine production dependencies and build output
-FROM node:23.11.1-alpine AS runner
-WORKDIR /app
-COPY --from=prod-deps --chown=node:node /app/node_modules ./node_modules
-COPY --from=build --chown=node:node /app/dist ./dist
+# Expose the port your Express server listens on (change if needed)
+EXPOSE 3000
 
-# Use the node user from the image
-USER node
-
-# Expose port 8080
-EXPOSE 8080
-
-# Start the server
-CMD ["node", "dist/index.js"]
+# Default command for development – expects "dev" script in package.json
+CMD ["pnpm", "dev"]

@@ -1,15 +1,20 @@
-version: "3.8"
+version: "3.9"
 
 services:
-  app:
-    container_name: express-ts-dev
+  backend:
     build:
       context: .
       dockerfile: Dockerfile
-    volumes:
-      - .:/app
-      - /app/node_modules
+    container_name: smart-todo-backend
+    working_dir: /app
     ports:
-      - "3000:3000"
-    command: pnpm run dev
-    env_file: .env
+      - "3000:3000" # host:container; change if your app uses another port
+    volumes:
+      # Mount source code for live reload
+      - .:/app
+      # Keep node_modules managed inside the container, not from the host
+      - /app/node_modules
+    env_file:
+      - .env
+    command: pnpm dev
+    restart: unless-stopped
