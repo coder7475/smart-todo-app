@@ -3,7 +3,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 import indexRouter from "@/routes";
-import userRoute from "@/routes/tasks.routes";
+
 import { middlewares } from "@/middlewares";
 import tasksRouter from "@/routes/tasks.routes";
 
