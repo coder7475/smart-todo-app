@@ -26,7 +26,7 @@ const envSchema = z.object({
 		}),
 	HOST: z.string().default("localhost"),
 	NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
-	DB_URI: z.string().url("DB_URI must be a valid URL"),
+	GEMINI_API_KEY: z.string(),
 });
 
 // Validate process.env and infer typed env object

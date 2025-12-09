@@ -1,5 +1,6 @@
 import { Request, Response,NextFunction } from "express";
 import { TaskSchema } from "./tasks.schema";
+import { tasksServices } from "./tasks.services";
 
 const prioritizeTasks = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -14,10 +15,12 @@ const prioritizeTasks = async (req: Request, res: Response, next: NextFunction) 
 
         const { tasks } = parsedBody.data;
         
+        const prioritizedTasks = await tasksServices.prioritizeTasks({ tasks});
+
         res.json({
 		    status: 200,
 		    message: "Task prioritized",
-		    data: tasks,
+		    data: prioritizedTasks,
 	    });
     } catch (error) {
         next(error);
