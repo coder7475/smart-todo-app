@@ -1,39 +1,19 @@
-import { useState, KeyboardEvent } from 'react';
-import { Button } from '../components/ui/button';
-
-type Priority = 'High' | 'Medium' | 'Low';
-
-type PrioritizedTask = {
-  task: string;
-  priority: Priority;
-  category: string;
-};
-
-// simple mock that assigns priorities deterministically
-const mockPrioritize = (tasks: string[]): Promise<PrioritizedTask[]> => {
-  const categories = ['Work', 'Home', 'Personal'];
-  const priorities: Priority[] = ['High', 'Medium', 'Low'];
-
-  const result = tasks.map((task, index) => ({
-    task,
-    priority: priorities[index % priorities.length],
-    category: categories[index % categories.length],
-  }));
-
-  return new Promise(resolve => {
-    setTimeout(() => resolve(result), 800); // fake latency
-  });
-};
+import { useState, type KeyboardEvent } from "react";
+import { Button } from "../components/ui/button";
+import { axiosInstance } from "@/lib/axios";
+import type { PrioritizedTask } from "@/types";
 
 const Home = () => {
   const [tasks, setTasks] = useState<string[]>([]);
-  const [prioritizedTasks, setPrioritizedTasks] = useState<PrioritizedTask[]>([]);
+  const [prioritizedTasks, setPrioritizedTasks] = useState<PrioritizedTask[]>(
+    []
+  );
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       addTask();
     }
   };
@@ -41,13 +21,13 @@ const Home = () => {
   const addTask = () => {
     const value = inputValue.trim();
     if (!value) return;
-    setTasks(prev => [...prev, value]);
-    setInputValue('');
+    setTasks((prev) => [...prev, value]);
+    setInputValue("");
     setError(null);
   };
 
   const removeTask = (index: number) => {
-    setTasks(prev => prev.filter((_, i) => i !== index));
+    setTasks((prev) => prev.filter((_, i) => i !== index));
   };
 
   const clearResults = () => {
@@ -56,17 +36,22 @@ const Home = () => {
 
   const prioritizeTasks = async () => {
     if (!tasks.length) {
-      setError('Please add at least one task before prioritizing.');
+      setError("Please add at least one task before prioritizing.");
       return;
     }
+
+    const rawTasks = {
+      tasks: tasks,
+    };
 
     setLoading(true);
     setError(null);
     try {
-      const data = await mockPrioritize(tasks);
+      const response = await axiosInstance.post("/prioritize", rawTasks);
+      const data = response.data;
       setPrioritizedTasks(data);
     } catch (err) {
-      setError('Failed to prioritize tasks. Please try again.');
+      setError("Failed to prioritize tasks. Please try again.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -92,7 +77,8 @@ const Home = () => {
         <header className="space-y-2">
           <h1 className="text-3xl font-bold">Smart To-Do List</h1>
           <p className="text-sm text-muted-foreground">
-            Add your tasks, then let the mock AI prioritize them by urgency and importance.
+            Add your tasks, then let the mock AI prioritize them by urgency and
+            importance.
           </p>
         </header>
 
@@ -104,18 +90,18 @@ const Home = () => {
               className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
               placeholder="e.g. Finish the monthly report for the boss"
               value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
+              onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
             />
-            <Button type="button" onClick={addTask} className='bg-blue-500 cursor-pointer'>
+            <Button
+              type="button"
+              onClick={addTask}
+              className="bg-blue-500 cursor-pointer"
+            >
               Add Task
             </Button>
           </div>
-          {error && (
-            <p className="text-xs text-red-500">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-xs text-red-500">{error}</p>}
         </section>
 
         {/* Unsorted Task List */}
@@ -124,7 +110,7 @@ const Home = () => {
             <h2 className="text-lg font-semibold">Your tasks</h2>
             {tasks.length > 0 && (
               <span className="text-xs text-muted-foreground">
-                {tasks.length} task{tasks.length > 1 ? 's' : ''}
+                {tasks.length} task{tasks.length > 1 ? "s" : ""}
               </span>
             )}
           </div>
@@ -145,7 +131,7 @@ const Home = () => {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className='cursor-pointer bg-red-700 text-white'
+                    className="cursor-pointer bg-red-700 text-white"
                     onClick={() => removeTask(index)}
                   >
                     Remove
@@ -159,7 +145,7 @@ const Home = () => {
             onClick={prioritizeTasks}
             disabled={loading || tasks.length === 0}
           >
-            {loading ? 'Prioritizing...' : 'Prioritize Tasks'}
+            {loading ? "Prioritizing..." : "Prioritize Tasks"}
           </Button>
           {prioritizedTasks.length > 0 && (
             <Button
@@ -183,7 +169,9 @@ const Home = () => {
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-red-600">High</h3>
                 {grouped.High.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">No high-priority tasks.</p>
+                  <p className="text-xs text-muted-foreground">
+                    No high-priority tasks.
+                  </p>
                 ) : (
                   <ul className="space-y-2 text-xs">
                     {grouped.High.map((item, idx) => (
@@ -205,7 +193,9 @@ const Home = () => {
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-amber-600">Medium</h3>
                 {grouped.Medium.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">No medium-priority tasks.</p>
+                  <p className="text-xs text-muted-foreground">
+                    No medium-priority tasks.
+                  </p>
                 ) : (
                   <ul className="space-y-2 text-xs">
                     {grouped.Medium.map((item, idx) => (
@@ -227,7 +217,9 @@ const Home = () => {
               <div className="space-y-2">
                 <h3 className="text-sm font-semibold text-emerald-600">Low</h3>
                 {grouped.Low.length === 0 ? (
-                  <p className="text-xs text-muted-foreground">No low-priority tasks.</p>
+                  <p className="text-xs text-muted-foreground">
+                    No low-priority tasks.
+                  </p>
                 ) : (
                   <ul className="space-y-2 text-xs">
                     {grouped.Low.map((item, idx) => (
