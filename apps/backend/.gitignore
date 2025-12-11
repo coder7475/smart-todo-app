@@ -28,3 +28,4 @@ docker-compose.override.yml
 # TypeScript cache
 *.tsbuildinfo
 
+.vercel

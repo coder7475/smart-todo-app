@@ -1,105 +1,73 @@
-# Express + TypeScript + Docker Template
+# Smart Todo Backend
 
-A starter template for building modern backend applications with **Express.js**, **TypeScript**, **Docker**, and **pnpm**. Perfect for local development and production-ready deployments.
+Express + TypeScript service that prioritizes user tasks with Google Gemini and serves the frontend via a simple REST API.
 
----
+## Stack and features
+- Express 4 + TypeScript with hot reload via `tsx`
+- Google Gemini 2.5 Flash integration for prioritization
+- Input and response validation with Zod
+- CORS + Helmet middleware, centralized error handling, graceful shutdown
+- Bundled with `tsup` for production builds
 
-## 🚀 Features
+## Prerequisites
+- Node.js 20+
+- pnpm 10+
+- Google Gemini API key
 
-- ⚡️ Express.js with TypeScript
-- 📦 pnpm as package manager
-- 🐳 Docker support for dev & prod
-- 📂 Modular folder structure
-- 🌱 `.env` environment configuration
-- 🔁 Hot-reloading with `ts-node-dev`
-
----
-
-## 🧱 Project Structure
-
-```
-
-.
-├── src/
-│ ├── routes/
-│ │ └── index.ts # Sample route
-│ ├── app.ts # Express app config
-│ └── server.ts # Entry point
-├── .env # Environment variables
-├── Dockerfile # Production Docker build
-├── docker-compose.yml # Dev environment
-├── package.json # Project metadata
-├── tsconfig.json # TS config for dev
-├── tsconfig.build.json # TS config for prod build
-└── README.md # You're here!
-
-```
-
----
-
-## 🛠️ Development Setup
-
-1. **Install dependencies**
-
+## Setup
+From the repo root:
 ```bash
 pnpm install
 ```
 
-2. **Run locally**
-
+Create `apps/backend/.env`:
 ```bash
-pnpm run dev
+PORT=3000
+HOST=localhost
+NODE_ENV=development
+GEMINI_API_KEY=your_gemini_key
 ```
 
-3. **Lint and type-check (optional)**
-
+## Run
+Development (watch mode):
 ```bash
-pnpm run build
+pnpm dev:backend      # from repo root
+# or
+pnpm --filter @smart-todo/backend dev
 ```
 
----
-
-## 🐳 Docker Usage
-
-### Run in Development Mode
-
+Build and start:
 ```bash
-docker-compose up --build
+pnpm --filter @smart-todo/backend build
+pnpm --filter @smart-todo/backend start
 ```
 
-### Build for Production
-
+Quality:
 ```bash
-docker build -t express-ts-app .
+pnpm --filter @smart-todo/backend lint
+pnpm --filter @smart-todo/backend format
 ```
 
-### Run in Production
+## API
+Base URL: `http://localhost:3000/api/v1`
 
-```bash
-docker run -p 3000:3000 --env-file .env express-ts-app
+- `POST /prioritize`  
+  Body: `{ "tasks": ["Finish report", "Buy groceries"] }`  
+  Response (200): array of `{ task, priority: "High"|"Medium"|"Low", category }`
+
+Validation errors return 400; unexpected issues return 500. See `docs/api_design.md` for the contract.
+
+## Folder structure
 ```
-
----
-
-## 🌐 Access the App
-
-After running in any mode, open:
-
+apps/backend
+├── src
+│   ├── app.ts           # Express app config
+│   ├── server.ts        # Entry + graceful shutdown
+│   ├── routes/          # HTTP routes
+│   ├── tasks/           # Controller, schema, services
+│   ├── utils/           # Gemini client, prompts, parsing, validation
+│   └── middlewares/     # Error + 404 handlers
+├── Dockerfile
+├── docker-compose.yml
+└── README.md
 ```
-http://localhost:3000
-```
-
----
-
-## 📦 Built With
-
-- [Express](https://expressjs.com/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [pnpm](https://pnpm.io/)
-- [Docker](https://www.docker.com/)
-
----
-
-## 📄 License
-
-MIT – feel free to use and modify.

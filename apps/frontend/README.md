@@ -1,52 +1,85 @@
-# 🧩 React + TypeScript + Vite + Redux + Shadcn UI Template
+# 📝 Smart Todo App Frontend
 
-A modern starter template for building robust React applications with TypeScript, Vite, Redux, Tailwind CSS, and Shadcn UI.
-Includes hot module replacement, opinionated ESLint configuration, and ready-to-deploy setup for Cloudflare.
+This is the frontend for the **Smart Todo App**, a modern full-stack application for managing your todos efficiently. Built with React, TypeScript, Vite, Redux Toolkit, Tailwind CSS, Shadcn UI, and designed for seamless deployment on Cloudflare. This project emphasizes scalability, speed, developer experience, and maintainable architecture.
 
 ---
 
-## ✨ Features
+## 📚 Table of Contents
 
-* ⚡ **Vite** – blazing-fast development and build tooling
-* ⚛️ **React** with **TypeScript** – type-safe and modern UI development
-* 🗃️ **Redux** – scalable state management
-* 🎨 **Tailwind CSS** & **Shadcn UI** – customizable and elegant component styling
-* ☁️ **Cloudflare** – easily deploy to Cloudflare Pages / Workers
-* 🧹 Pre-configured **ESLint** – with recommended, type-aware rules for code quality
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Development](#development)
+- [Building & Deployment](#building--deployment)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## 🚩 Features
+
+- ⚡ _Vite_-powered fast builds and hot module reload
+- ✨ **React 18+** with **TypeScript** for modern, type-safe development
+- 💾 Global state management with **Redux Toolkit**
+- 🎨 **Tailwind CSS** and **Shadcn UI** for elegant, customizable UI
+- 🚀 Deployment-ready for **Cloudflare Pages**/**Workers**
+- 🧹 Pre-configured **ESLint** and **Prettier** for high code quality
+- 🧩 Modular folder structure for scalable growth
 
 ---
 
 ## 🚀 Getting Started
 
-Clone the repository and install dependencies:
+### 1. Clone the Repository
 
-```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
+```sh
+git clone https://github.com/your-org/smart-todo-app.git
+cd smart-todo-app
+cd apps/frontend
+```
+
+### 2. Install Dependencies
+
+Make sure you have [pnpm](https://pnpm.io/) installed ([Node.js](https://nodejs.org/) >= 18). Then:
+
+```sh
 pnpm install
 ```
 
-Run the development server:
+---
 
-```bash
+## 💻 Development
+
+To start the development server with hot-reload:
+
+```sh
 pnpm dev
 ```
 
-Build for production:
+Runs at [http://localhost:5173](http://localhost:5173) by default.
 
-```bash
+---
+
+## 🏗️ Building & Deployment
+
+### Build for Production
+
+```sh
 pnpm build
 ```
 
-Preview the production build locally:
+### Preview Production Build Locally
 
-```bash
+```sh
 pnpm preview
 ```
 
-Deploy to Cloudflare (if configured):
+### Deploy to Cloudflare
 
-```bash
+Make sure your Cloudflare credentials and `wrangler.jsonc` are set up.
+
+```sh
 pnpm deploy
 ```
 
@@ -54,52 +87,53 @@ pnpm deploy
 
 ## 🛠 Tech Stack
 
-* React 18+
-* TypeScript
-* Vite
-* Redux Toolkit
-* Tailwind CSS
-* Shadcn UI
-* ESLint & Prettier
-* (Optional) Cloudflare Pages / Workers
+- **React 18+**
+- **TypeScript**
+- **Vite**
+- **Redux Toolkit**
+- **Tailwind CSS**
+- **Shadcn UI**
+- **ESLint** & **Prettier**
+- **Cloudflare Pages/Workers** (for serverless deployment)
 
 ---
 
-## 📦 Folder Structure
+## 📁 Project Structure
 
-```sh
+```
+apps/frontend
 ├── components.json
 ├── eslint.config.js
 ├── index.html
 ├── package.json
 ├── pnpm-lock.yaml
-├── public
+├── public/
 ├── README.md
-├── src
+├── src/
 │   ├── App.css
 │   ├── App.tsx
-│   ├── assets
-│   ├── components
-│   ├── config
-│   ├── constants
-│   ├── hooks
+│   ├── assets/
+│   ├── components/
+│   ├── config/
+│   ├── constants/
+│   ├── hooks/
 │   ├── index.css
-│   ├── layout
-│   ├── lib
+│   ├── layout/
+│   ├── lib/
 │   ├── main.tsx
-│   ├── modules
-│   ├── pages
-│   ├── providers
-│   ├── redux
-│   ├── router
-│   ├── services
+│   ├── modules/
+│   ├── pages/
+│   ├── providers/
+│   ├── redux/        # State management logic
+│   ├── router/
+│   ├── services/
 │   └── vite-env.d.ts
 ├── tsconfig.app.json
 ├── tsconfig.json
 ├── tsconfig.node.json
 ├── tsconfig.worker.json
 ├── vite.config.ts
-├── worker
+├── worker/
 │   └── index.ts
 ├── worker-configuration.d.ts
 └── wrangler.jsonc
@@ -107,7 +141,20 @@ pnpm deploy
 
 ---
 
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!
+- Fork the repository
+- Create a new branch (`git checkout -b my-feature`)
+- Commit your changes
+- Open a pull request
+
+---
+
 ## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](../LICENSE).
 
+---
+
+_Developed with ❤️ by the Smart Todo App team._
